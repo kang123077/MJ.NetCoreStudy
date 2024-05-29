@@ -1,6 +1,7 @@
 ﻿using AspnetNote.MVC.DataContext;
 using AspnetNote.MVC.Models;
 using AspnetNote.MVC.ViewModels;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AspnetNote.MVC.Controllers
@@ -46,6 +47,8 @@ namespace AspnetNote.MVC.Controllers
                     // 로그인에 성공 했을 때
                     if (user != null)
                     {
+                        // 로그인 정보를 전송
+                        HttpContext.Session.SetInt32("USER_LOGIN_KEY", user.UserNum);
                         return RedirectToAction("LoginSuccess", "Home"); // 로그인 성공 페이지로
                         // 만약 사용자 자체가 회원가입이 X일 경우
                         // 앞에서 아이디, 비밀번호를 찾을 때 분기 설정을 해주면 된다
@@ -58,6 +61,15 @@ namespace AspnetNote.MVC.Controllers
             return View();
         }
         // 전역적인 경고 메세지를 주기 위해서는 asp-validation-summary="ModelOnly"를 HTML상에서 사용한다
+
+        public IActionResult Logout()
+        {
+            HttpContext.Session.Remove("USER_LOGIN_KEY");
+            // 모든 세션이 삭제되므로, Clear는 필요에 의한 것이 아니며 관리자가 아니면 쓸 일 X
+            // HttpContext.Session.Clear();
+
+            return RedirectToAction("Index", "Home");
+        }
 
         /// <summary>
         /// 회원 가입 뷰

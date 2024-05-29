@@ -27,16 +27,27 @@
                         </li>
                     </ul>
                     <ul class="nav navbar-nav navbar-right">
-                        <li>
-                            <a asp-area="" asp-controller="Account" asp-action="Register">
-                                회원 가입
-                            </a>
-                        </li>
-                        <li>
-                            <a asp-area="" asp-controller="Account" asp-action="Login">
-                                로그인
-                            </a>
-                        </li>
+                        @if (Context.Session.GetInt32("USER_LOGIN_KEY") == null)
+                        {
+                            <li>
+                                <a asp-area="" asp-controller="Account" asp-action="Register">
+                                    회원가입
+                                </a>
+                            </li>
+                            <li>
+                                <a asp-area="" asp-controller="Account" asp-action="Login">
+                                    로그인
+                                </a>
+                            </li>
+                        }
+                        else
+                        {
+                            <li>
+                                <a asp-area="" asp-controller="Account" asp-action="Logout">
+                                    로그아웃
+                                </a>
+                            </li>
+                        }
                     </ul>
                 </div>
             </div>
