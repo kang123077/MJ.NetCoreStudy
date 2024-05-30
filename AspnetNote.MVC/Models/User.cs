@@ -1,4 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations;
 
 namespace AspnetNote.MVC.Models
 {
@@ -25,7 +25,7 @@ namespace AspnetNote.MVC.Models
         /// <summary>
         /// 사용자 비밀번호
         /// </summary>
-        [Required(ErrorMessage = "사용자 비밀번호 입력하세요")] // not null 설정
+        [Required(ErrorMessage = "사용자 비밀번호를 입력하세요")] // not null 설정
         public string UserPassword { get; set;}
     }
 }

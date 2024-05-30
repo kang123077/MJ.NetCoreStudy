@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AspnetNote.MVC.Migrations
 {
     [DbContext(typeof(AspnetNoteDbContext))]
-    [Migration("20240528091640_FirstMigration")]
-    partial class FirstMigration
+    [Migration("20240530053315_mig00")]
+    partial class mig00
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
