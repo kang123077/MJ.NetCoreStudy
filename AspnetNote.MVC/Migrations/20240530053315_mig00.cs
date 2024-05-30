@@ -5,7 +5,7 @@
 namespace AspnetNote.MVC.Migrations
 {
     /// <inheritdoc />
-    public partial class FirstMigration : Migration
+    public partial class mig00 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

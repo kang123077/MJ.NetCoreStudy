@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+using AspnetNote.MVC.ViewModels;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace AspnetNote.MVC.Models
@@ -14,13 +15,13 @@ namespace AspnetNote.MVC.Models
         /// <summary>
         /// 게시물 제목
         /// </summary>
-        [Required]
+        [Required(ErrorMessage ="제목을 입력하세요.")]
         public string NoteTitle { get; set; }
 
         /// <summary>
         /// 게시물 내용
         /// </summary>
-        [Required]
+        [Required(ErrorMessage = "내용을 입력하세요.")]
         public string NoteContents { get; set; }
 
         /// <summary>
@@ -37,5 +38,14 @@ namespace AspnetNote.MVC.Models
         // 나중에 천천히 비 동기적으로 가져온다는 의미에서 virtual을 선언함. 안써도 정상작동은 한다.
         [ForeignKey("UserNum")]
         public virtual User User { get; set; }
+
+        public Note() { }
+
+        public Note(NoteAddModel model)
+        {
+            NoteTitle = model.NoteTitle;
+            NoteContents = model.NoteContents;
+            UserNum = model.UserNum;
+        }
     }
 }
