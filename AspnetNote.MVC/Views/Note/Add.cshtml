@@ -9,9 +9,10 @@
                 <label>제목</label>
                 <input type="text" class="form-control" asp-for="NoteTitle" placeholder="제목 입력" />
                 <span class="text-danger" asp-validation-for="NoteTitle"></span>
+                <label>내용</label>
             </div>
             <div class="form-group">
-                <textarea rows="20px" class="form-control" asp-for="NoteContents" placeholder="내용 입력"></textarea>
+                <textarea rows="20px" class="editor" asp-for="NoteContents" placeholder="내용 입력"></textarea>
                 <span class="text-danger" asp-validation-for="NoteContents"></span>
             </div>
             <div class="form-group">
