@@ -152,14 +152,59 @@ namespace AspnetNote.MVC.Controllers
             }
         }
 
+        /// <summary>
+        /// 게시물 수정
+        /// </summary>
+        /// <param name="noteNum"></param>
+        /// <returns></returns>
         public IActionResult Modify(int noteNum)
         {
+            if (HttpContext.Session.GetInt32("USER_LOGIN_KEY") == null)
+            {
+                // 로그인이 안 된 상태
+                return RedirectToAction("Login", "Account");
+            }
+
             using (var db = new AspnetNoteDbContext())
             {
-                Note note = db.Notes.FirstOrDefault(n => n.NoteNum.Equals(noteNum));
-                TempData["ModifyNote"] = note;
+                var note = db.Notes.FirstOrDefault(n => n.NoteNum.Equals(noteNum));
+
+                if (note != null)
+                {
+                    return View(note);
+                }
+                else
+                {
+                    return Redirect("Index");
+                }
             }
-            return Redirect("Add");
+        }
+
+        [HttpPost]
+        public IActionResult Modify(Note model)
+        {
+            if (HttpContext.Session.GetInt32("USER_LOGIN_KEY") == null)
+            {
+                // 로그인이 안 된 상태
+                return RedirectToAction("Login", "Account");
+            }
+
+            using (var db = new AspnetNoteDbContext())
+            {
+                var note = db.Notes.FirstOrDefault(n => n.NoteNum.Equals(model.NoteNum));
+
+                note.NoteTitle = model.NoteTitle;
+                note.NoteContents = model.NoteContents;
+
+                if (db.SaveChanges() > 0)
+                {
+                    return Redirect("Index");
+                }
+                else
+                {
+                    return View(note);
+                }
+            }
         }
     }
 }

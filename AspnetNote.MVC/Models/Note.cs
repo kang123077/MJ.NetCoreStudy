@@ -47,5 +47,12 @@ namespace AspnetNote.MVC.Models
             NoteContents = model.NoteContents;
             UserNum = model.UserNum;
         }
+
+        public Note(Note model)
+        {
+            NoteTitle = model.NoteTitle;
+            NoteContents = model.NoteContents;
+            UserNum = model.UserNum;
+        }
     }
 }
