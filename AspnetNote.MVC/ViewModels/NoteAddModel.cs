@@ -1,3 +1,4 @@
+using AspnetNote.MVC.Models;
 using System.ComponentModel.DataAnnotations;
 
 namespace AspnetNote.MVC.ViewModels
@@ -21,5 +22,14 @@ namespace AspnetNote.MVC.ViewModels
         /// </summary>
         [Required]
         public int UserNum { get; set; }
+
+        public NoteAddModel() { }
+
+        public NoteAddModel(Note model)
+        {
+            NoteTitle = model.NoteTitle;
+            NoteContents = model.NoteContents;
+            UserNum = model.UserNum;
+        }
     }
 }
