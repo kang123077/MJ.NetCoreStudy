@@ -56,6 +56,12 @@ namespace AspnetNote.MVC.Controllers
                 return RedirectToAction("Login", "Account");
             }
 
+            if (TempData["ModifyNote"] != null)
+            {
+                NoteAddModel model = new NoteAddModel((Note)TempData["ModifyNote"]);
+                return View(model);
+            }
+
             return View();
         }
 
@@ -119,6 +125,41 @@ namespace AspnetNote.MVC.Controllers
             }
 
             return View();
+        }
+
+        [HttpPost]
+        public IActionResult Delete(int noteNum)
+        {
+            if (HttpContext.Session.GetInt32("USER_LOGIN_KEY") == null)
+            {
+                // 로그인이 안 된 상태
+                return RedirectToAction("Login", "Account");
+            }
+
+            using (var db = new AspnetNoteDbContext())
+            {
+                var note = db.Notes.FirstOrDefault(n => n.NoteNum.Equals(noteNum));
+                db.Notes.Remove(note);
+
+                if (db.SaveChanges() > 0)
+                {
+                    return Redirect("Index");
+                }
+                else
+                {
+                    return View(note);
+                }
+            }
+        }
+
+        public IActionResult Modify(int noteNum)
+        {
+            using (var db = new AspnetNoteDbContext())
+            {
+                Note note = db.Notes.FirstOrDefault(n => n.NoteNum.Equals(noteNum));
+                TempData["ModifyNote"] = note;
+            }
+            return Redirect("Add");
         }
     }
 }
