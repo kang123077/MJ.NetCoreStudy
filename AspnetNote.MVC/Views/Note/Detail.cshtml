@@ -17,10 +17,7 @@
             </div>
             <div class="panel-footer text-right">
                 <a class="btn btn-primary" asp-controller="Note" asp-action="Index">목록</a>
-                <form asp-controller="Note" asp-action="Modify" method="post">
-                    <input type="hidden" name="noteNum" value="@Model.NoteNum" />
-                    <button type="submit" class="btn btn-warning">수정</button>
-                </form>
+                <a class="btn btn-secondary" asp-controller="Note" asp-action="Modify" asp-route-noteNum="@Model.NoteNum">수정</a>
                 <form asp-controller="Note" asp-action="Delete" method="post" onsubmit="return confirm('삭제하시겠습니까?');">
                     <input type="hidden" name="noteNum" value="@Model.NoteNum" />
                     <button type="submit" class="btn btn-warning">삭제</button>
