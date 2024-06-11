@@ -1,4 +1,8 @@
-﻿var builder = WebApplication.CreateBuilder(args);
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using AspnetNote.MVC.DataContext;
+
+var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
@@ -9,8 +13,22 @@ builder.Services.AddControllersWithViews();
 // 때문에 의존성 주입을 통해서 생성자에 주입을 시켜주면 어떤 메서드에서도 동일한 객체를 사용 가능하다.
 // 이제는 미들웨어로 처리 가능하다. Session, Identity, Web API 관련 기능
 // Session 서비스에 등록
-builder.Services.AddSession(options => {
-    options.IdleTimeout = TimeSpan.FromMinutes(1);//Session Timeout.
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(10);//Session Timeout.
+});
+
+builder.Services.AddAuthentication("Cookies").AddCookie("Cookies", config =>
+{
+    config.ExpireTimeSpan = TimeSpan.FromHours(12);
+    config.LoginPath = "/Account/Login";
+    config.LogoutPath = "/Account/Login";
+    config.Cookie.Name = "Test.Cookie";
+});
+
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromHours(12);
 });
 
 var app = builder.Build();
@@ -23,6 +41,14 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
+app.UseAuthentication();
+
+app.UseRouting();
+
+app.UseAuthorization();
+
+app.UseCookiePolicy();
+
 // application 단위로 세션을 사용하겠다
 app.UseSession();
 
@@ -30,9 +56,6 @@ app.UseHttpsRedirection();
 
 app.UseStaticFiles();
 
-app.UseRouting();
-
-app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",

@@ -1,4 +1,4 @@
-﻿using AspnetNote.MVC.Models;
+using AspnetNote.MVC.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace AspnetNote.MVC.DataContext

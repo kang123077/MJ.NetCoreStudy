@@ -1,8 +1,14 @@
-﻿using AspnetNote.MVC.DataContext;
+using AspnetNote.MVC.DataContext;
 using AspnetNote.MVC.Models;
 using AspnetNote.MVC.ViewModels;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace AspnetNote.MVC.Controllers
 {
@@ -26,6 +32,8 @@ namespace AspnetNote.MVC.Controllers
         [HttpPost]
         public IActionResult Login(LoginViewModel model)
         {
+            ClaimsIdentity? identity = null;
+            bool isAuthenticated = false;
             // ID, 비밀번호 필수 입력
             if (ModelState.IsValid)
             {
@@ -47,8 +55,15 @@ namespace AspnetNote.MVC.Controllers
                     // 로그인에 성공 했을 때
                     if (user != null)
                     {
+                        HttpContext.Session.SetString("username", model.UserId);
+                        isAuthenticated = true;
+                        identity = new ClaimsIdentity(new[] {
+                        new Claim(ClaimTypes.Name, model.UserId)},
+                        CookieAuthenticationDefaults.AuthenticationScheme);
+                        var principal = new ClaimsPrincipal(identity);
+                        var login = HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
                         // 로그인 정보를 전송
-                        HttpContext.Session.SetInt32("USER_LOGIN_KEY", user.UserNum);
+                        // HttpContext.Session.SetInt32("USER_LOGIN_KEY", user.UserNum);
                         return RedirectToAction("LoginSuccess", "Home"); // 로그인 성공 페이지로
                         // 만약 사용자 자체가 회원가입이 X일 경우
                         // 앞에서 아이디, 비밀번호를 찾을 때 분기 설정을 해주면 된다
@@ -64,7 +79,9 @@ namespace AspnetNote.MVC.Controllers
 
         public IActionResult Logout()
         {
-            HttpContext.Session.Remove("USER_LOGIN_KEY");
+            var login = HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            HttpContext.Session.Remove("username");
+            // HttpContext.Session.Remove("USER_LOGIN_KEY");
             // 모든 세션이 삭제되므로, Clear는 필요에 의한 것이 아니며 관리자가 아니면 쓸 일 X
             // HttpContext.Session.Clear();
 
@@ -100,6 +117,18 @@ namespace AspnetNote.MVC.Controllers
                 return RedirectToAction("Index", "Home");
             }
             return View();
+        }
+    }
+
+    public class CheckSession : ActionFilterAttribute, IActionFilter
+    {
+        public override void OnActionExecuting(ActionExecutingContext context)
+        {
+            var check = context.HttpContext;
+            if (check.Session.GetString("username") == null)
+            {
+                context.Result = new RedirectToRouteResult(new RouteValueDictionary(new { action = "Login", Controller = "Account" }));
+            }
         }
     }
 }

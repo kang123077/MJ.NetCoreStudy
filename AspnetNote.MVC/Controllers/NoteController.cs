@@ -1,10 +1,13 @@
 using AspnetNote.MVC.DataContext;
 using AspnetNote.MVC.Models;
 using AspnetNote.MVC.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AspnetNote.MVC.Controllers
 {
+
+    [Authorize, CheckSession]
     public class NoteController : Controller
     {
         /// <summary>
@@ -13,11 +16,6 @@ namespace AspnetNote.MVC.Controllers
         /// <returns></returns>
         public IActionResult Index()
         {
-            if (HttpContext.Session.GetInt32("USER_LOGIN_KEY") == null)
-            {
-                // 로그인이 안 된 상태
-                return RedirectToAction("Login", "Account");
-            }
             using (var db = new AspnetNoteDbContext())
             {
                 var list = db.Notes.ToList();
@@ -32,11 +30,6 @@ namespace AspnetNote.MVC.Controllers
         /// <returns></returns>
         public IActionResult Detail(int noteNum)
         {
-            if (HttpContext.Session.GetInt32("USER_LOGIN_KEY") == null)
-            {
-                // 로그인이 안 된 상태
-                return RedirectToAction("Login", "Account");
-            }
             using (var db = new AspnetNoteDbContext())
             {
                 var note = db.Notes.FirstOrDefault(n => n.NoteNum.Equals(noteNum));
@@ -50,12 +43,6 @@ namespace AspnetNote.MVC.Controllers
         /// <returns></returns>
         public IActionResult Add()
         {
-            if (HttpContext.Session.GetInt32("USER_LOGIN_KEY") == null)
-            {
-                // 로그인이 안 된 상태
-                return RedirectToAction("Login", "Account");
-            }
-
             if (TempData["ModifyNote"] != null)
             {
                 NoteAddModel model = new NoteAddModel((Note)TempData["ModifyNote"]);
@@ -68,12 +55,6 @@ namespace AspnetNote.MVC.Controllers
         [HttpPost]
         public IActionResult Add(NoteAddModel model)
         {
-            if (HttpContext.Session.GetInt32("USER_LOGIN_KEY") == null)
-            {
-                // 로그인이 안 된 상태
-                return RedirectToAction("Login", "Account");
-            }
-
             model.UserNum = HttpContext.Session.GetInt32("USER_LOGIN_KEY").Value;
 
             if (ModelState.IsValid)
@@ -103,12 +84,6 @@ namespace AspnetNote.MVC.Controllers
         /// <returns></returns>
         public IActionResult Edit()
         {
-            if (HttpContext.Session.GetInt32("USER_LOGIN_KEY") == null)
-            {
-                // 로그인이 안 된 상태
-                return RedirectToAction("Login", "Account");
-            }
-
             return View();
         }
 
@@ -130,12 +105,6 @@ namespace AspnetNote.MVC.Controllers
         [HttpPost]
         public IActionResult Delete(int noteNum)
         {
-            if (HttpContext.Session.GetInt32("USER_LOGIN_KEY") == null)
-            {
-                // 로그인이 안 된 상태
-                return RedirectToAction("Login", "Account");
-            }
-
             using (var db = new AspnetNoteDbContext())
             {
                 var note = db.Notes.FirstOrDefault(n => n.NoteNum.Equals(noteNum));
@@ -159,12 +128,6 @@ namespace AspnetNote.MVC.Controllers
         /// <returns></returns>
         public IActionResult Modify(int noteNum)
         {
-            if (HttpContext.Session.GetInt32("USER_LOGIN_KEY") == null)
-            {
-                // 로그인이 안 된 상태
-                return RedirectToAction("Login", "Account");
-            }
-
             using (var db = new AspnetNoteDbContext())
             {
                 var note = db.Notes.FirstOrDefault(n => n.NoteNum.Equals(noteNum));
@@ -183,12 +146,6 @@ namespace AspnetNote.MVC.Controllers
         [HttpPost]
         public IActionResult Modify(Note model)
         {
-            if (HttpContext.Session.GetInt32("USER_LOGIN_KEY") == null)
-            {
-                // 로그인이 안 된 상태
-                return RedirectToAction("Login", "Account");
-            }
-
             using (var db = new AspnetNoteDbContext())
             {
                 var note = db.Notes.FirstOrDefault(n => n.NoteNum.Equals(model.NoteNum));
