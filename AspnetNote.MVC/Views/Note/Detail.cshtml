@@ -1,28 +1,69 @@
 @model AspnetNote.MVC.Models.Note
 
-<div class="row">
-    <div class="col-lg-12">
-        <h3 class="page-header">상세 읽기 - @Model.NoteTitle</h3>
-    </div>
-</div>
+<!DOCTYPE html>
+<html lang="en">
 
-<div class="row">
-    <div class="col-lg-10">
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                제목 : @Model.NoteTitle
-            </div>
-            <div class="panel-body">
-                @Html.Raw(@Model.NoteContents)
-            </div>
-            <div class="panel-footer text-right">
-                <a class="btn btn-primary" asp-controller="Note" asp-action="Index">목록</a>
-                <a class="btn btn-secondary" asp-controller="Note" asp-action="Modify" asp-route-noteNum="@Model.NoteNum">수정</a>
-                <form asp-controller="Note" asp-action="Delete" method="post" onsubmit="return confirm('삭제하시겠습니까?');">
-                    <input type="hidden" name="noteNum" value="@Model.NoteNum" />
-                    <button type="submit" class="btn btn-warning">삭제</button>
-                </form>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="apple-touch-icon" sizes="76x76" href="../assets/img/apple-icon.png">
+    <link rel="icon" type="image/png" href="../assets/img/favicon.png">
+    <title>
+        Material Dashboard 2 by Creative Tim
+    </title>
+    <!--     Fonts and icons     -->
+    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,900|Roboto+Slab:400,700" />
+    <!-- Nucleo Icons -->
+    <link href="../assets/css/nucleo-icons.css" rel="stylesheet" />
+    <link href="../assets/css/nucleo-svg.css" rel="stylesheet" />
+    <!-- Font Awesome Icons -->
+    <script src="https://kit.fontawesome.com/42d5adcbca.js" crossorigin="anonymous"></script>
+    <!-- Material Icons -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+    <!-- CSS Files -->
+    <link id="pagestyle" href="../assets/css/material-dashboard.css?v=3.0.0" rel="stylesheet" />
+</head>
+<body>
+    <div class="row">
+        <div class="col-lg-12">
+            <h3 class="page-header">@Model.NoteTitle</h3>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-10">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    @Html.Raw(@Model.NoteContents)
+                </div>
+                <div class="panel-footer text-right">
+                    <form asp-controller="Note" asp-action="Delete" method="post" onsubmit="return confirm('삭제하시겠습니까?');">
+                        <a class="btn btn-primary" asp-controller="Note" asp-action="Index">목록</a>
+                        <a class="btn btn-secondary" asp-controller="Note" asp-action="Modify" asp-route-noteNum="@Model.NoteNum">수정</a>
+                        <input type="hidden" name="noteNum" value="@Model.NoteNum" />
+                        <button type="submit" class="btn btn-warning">삭제</button>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
-</div>
+    <!--   Core JS Files   -->
+    <script src="../assets/js/core/popper.min.js"></script>
+    <script src="../assets/js/core/bootstrap.min.js"></script>
+    <script src="../assets/js/plugins/perfect-scrollbar.min.js"></script>
+    <script src="../assets/js/plugins/smooth-scrollbar.min.js"></script>
+    <script>
+        var win = navigator.platform.indexOf('Win') > -1;
+        if (win && document.querySelector('#sidenav-scrollbar')) {
+            var options = {
+                damping: '0.5'
+            }
+            Scrollbar.init(document.querySelector('#sidenav-scrollbar'), options);
+        }
+    </script>
+    <!-- Github buttons -->
+    <script async defer src="https://buttons.github.io/buttons.js"></script>
+    <!-- Control Center for Material Dashboard: parallax effects, scripts for the example pages etc -->
+    <script src="../assets/js/material-dashboard.min.js?v=3.0.0"></script>
+</body>
+
+</html>
