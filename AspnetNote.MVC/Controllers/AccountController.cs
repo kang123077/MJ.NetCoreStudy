@@ -55,7 +55,7 @@ namespace AspnetNote.MVC.Controllers
                     // 로그인에 성공 했을 때
                     if (user != null)
                     {
-                        HttpContext.Session.SetString("username", model.UserId);
+                        HttpContext.Session.SetString("username", user.UserId);
                         isAuthenticated = true;
                         identity = new ClaimsIdentity(new[] {
                         new Claim(ClaimTypes.Name, model.UserId)},
@@ -63,7 +63,7 @@ namespace AspnetNote.MVC.Controllers
                         var principal = new ClaimsPrincipal(identity);
                         var login = HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
                         // 로그인 정보를 전송
-                        // HttpContext.Session.SetInt32("USER_LOGIN_KEY", user.UserNum);
+                        HttpContext.Session.SetInt32("USER_LOGIN_KEY", user.UserNum);
                         return RedirectToAction("LoginSuccess", "Home"); // 로그인 성공 페이지로
                         // 만약 사용자 자체가 회원가입이 X일 경우
                         // 앞에서 아이디, 비밀번호를 찾을 때 분기 설정을 해주면 된다
